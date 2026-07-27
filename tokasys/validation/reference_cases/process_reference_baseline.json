@@ -1,0 +1,247 @@
+{
+  "case_id": "process_large_tokamak_eval_dbd37a8f",
+  "description": "Actual PROCESS large_tokamak_eval regression reference case. TokaSys evaluates a mapped 0D problem from the PROCESS input file and compares selected outputs against the tracked PROCESS MFILE.",
+  "source": {
+    "code": "PROCESS",
+    "scenario": "large_tokamak_eval",
+    "runtitle": "generic large tokamak",
+    "process_repository": "https://github.com/ukaea/PROCESS",
+    "input_file": "https://raw.githubusercontent.com/ukaea/PROCESS/main/tests/regression/input_files/large_tokamak_eval.IN.DAT",
+    "reference_mfile": "https://raw.githubusercontent.com/timothy-nunn/process-tracking-data/master/large_tokamak_eval_MFILE_dbd37a8ffdc88959c0fe604e2420f40d3d9833bd.DAT",
+    "process_commit": "dbd37a8ffdc88959c0fe604e2420f40d3d9833bd",
+    "process_version": "0.0.1.dev1+gdbd37a8ff",
+    "run_date": "2026-06-22 UTC",
+    "ifail": 1,
+    "sqsumsq": 8.659881927191689e-14,
+    "notes": "PROCESS solves electron temperature and density for this evaluation case. The TokaSys mapping converts volume-averaged PROCESS density to greenwald_fraction and represents blanket/shield with explicit inboard and outboard thicknesses."
+  },
+  "tokasys_problem": {
+    "design": {
+      "major_radius_m": 8.0,
+      "aspect_ratio": 3.0,
+      "elongation": 1.85,
+      "triangularity": 0.5,
+      "toroidal_field_t": 5.318322174644904,
+      "plasma_current_ma": 16.091095408042267,
+      "greenwald_fraction": 1.071007231733631,
+      "target_temperature_keV": 12.361666334611778,
+      "confinement_h98": 1.185971818905028,
+      "auxiliary_heating_mw": 75.0,
+      "current_drive_power_mw": 3.4135187353611194,
+      "inboard_first_wall_thickness_m": 0.05,
+      "outboard_first_wall_thickness_m": 0.05,
+      "inboard_blanket_thickness_m": 0.85,
+      "outboard_blanket_thickness_m": 0.85,
+      "inboard_shield_thickness_m": 0.55,
+      "outboard_shield_thickness_m": 0.55,
+      "tf_coil_thickness_m": 1.2,
+      "cs_thickness_m": 0.546816593988753
+    },
+    "bounds": {
+      "upper": {
+        "greenwald_fraction": 1.2
+      }
+    },
+    "technology": {
+      "net_electric_target_mw": 400.0,
+      "tf_peak_field_limit_t": 14.0,
+      "thermal_efficiency": 0.4
+    },
+    "config": {
+      "steady_state": false,
+      "energy_closure_mode": "full_space",
+      "plasma_profile_model": "process_pedestal",
+      "process_profile_alphan": 1.0,
+      "process_profile_alphat": 1.45,
+      "process_profile_tbeta": 2.0,
+      "process_density_pedestal_radius": 0.94,
+      "process_temperature_pedestal_radius": 0.94,
+      "process_density_pedestal_greenwald_fraction": 0.85,
+      "process_density_separatrix_greenwald_fraction": 0.5,
+      "process_temperature_pedestal_keV": 5.5,
+      "process_temperature_separatrix_keV": 0.1
+    }
+  },
+  "metrics": [
+    {
+      "name": "major_radius",
+      "process_variable": "rmajor",
+      "path": "design.major_radius_m",
+      "unit": "m",
+      "reference": 8.0,
+      "rtol": 0.001,
+      "atol": 0.001
+    },
+    {
+      "name": "aspect_ratio",
+      "process_variable": "aspect",
+      "path": "design.aspect_ratio",
+      "unit": "",
+      "reference": 3.0,
+      "rtol": 0.001,
+      "atol": 0.001
+    },
+    {
+      "name": "elongation",
+      "process_variable": "kappa",
+      "path": "design.elongation",
+      "unit": "",
+      "reference": 1.85,
+      "rtol": 0.001,
+      "atol": 0.001
+    },
+    {
+      "name": "triangularity",
+      "process_variable": "triang",
+      "path": "design.triangularity",
+      "unit": "",
+      "reference": 0.5,
+      "rtol": 0.001,
+      "atol": 0.001
+    },
+    {
+      "name": "toroidal_field_on_axis",
+      "process_variable": "b_plasma_toroidal_on_axis",
+      "path": "design.toroidal_field_t",
+      "unit": "T",
+      "reference": 5.318322174644904,
+      "rtol": 0.001,
+      "atol": 0.001
+    },
+    {
+      "name": "plasma_current",
+      "process_variable": "plasma_current_MA",
+      "path": "design.plasma_current_ma",
+      "unit": "MA",
+      "reference": 16.091095408042267,
+      "rtol": 0.001,
+      "atol": 0.001
+    },
+    {
+      "name": "electron_density",
+      "process_variable": "nd_plasma_electrons_vol_avg",
+      "path": "plasma.electron_density_m3",
+      "unit": "m^-3",
+      "reference": 7.71419612196593e19,
+      "rtol": 0.02,
+      "atol": 1.0e18
+    },
+    {
+      "name": "electron_temperature",
+      "process_variable": "temp_plasma_electron_vol_avg_kev",
+      "path": "design.target_temperature_keV",
+      "unit": "keV",
+      "reference": 12.361666334611778,
+      "rtol": 0.001,
+      "atol": 0.001
+    },
+    {
+      "name": "q95",
+      "process_variable": "q95",
+      "path": "plasma.q95",
+      "unit": "",
+      "reference": 3.7339078193128556,
+      "rtol": 0.12,
+      "atol": 0.1
+    },
+    {
+      "name": "beta_toroidal",
+      "process_variable": "beta_total_vol_avg",
+      "path": "plasma.beta_toroidal",
+      "unit": "",
+      "reference": 0.03230408815355488,
+      "rtol": 0.35,
+      "atol": 0.005
+    },
+    {
+      "name": "fusion_power",
+      "process_variable": "p_fusion_total_mw",
+      "path": "plasma.fusion_power_mw",
+      "unit": "MW",
+      "reference": 1613.0722101197148,
+      "rtol": 0.75,
+      "atol": 150.0
+    },
+    {
+      "name": "auxiliary_heat_power",
+      "process_variable": "p_hcd_primary_extra_heat_mw",
+      "path": "design.auxiliary_heating_mw",
+      "unit": "MW",
+      "reference": 75.0,
+      "rtol": 0.001,
+      "atol": 0.001
+    },
+    {
+      "name": "current_drive_power",
+      "process_variable": "p_hcd_injected_current_total_mw",
+      "path": "design.current_drive_power_mw",
+      "unit": "MW",
+      "reference": 3.4135187353611194,
+      "rtol": 0.001,
+      "atol": 0.001
+    },
+    {
+      "name": "gross_electric_power",
+      "process_variable": "p_plant_electric_gross_mw",
+      "path": "power.gross_electric_power_mw",
+      "unit": "MW",
+      "reference": 873.8542820327484,
+      "rtol": 0.75,
+      "atol": 100.0
+    },
+    {
+      "name": "net_electric_power",
+      "process_variable": "p_plant_electric_net_mw",
+      "path": "power.flat_top_net_electric_power_mw",
+      "unit": "MW",
+      "reference": 392.90626867703656,
+      "rtol": 0.75,
+      "atol": 100.0
+    },
+    {
+      "name": "recirculating_fraction",
+      "process_variable": "f_p_plant_electric_recirc",
+      "path": "power.recirculating_fraction",
+      "unit": "",
+      "reference": 0.5503755297015159,
+      "rtol": 0.75,
+      "atol": 0.1
+    },
+    {
+      "name": "peak_tf_field",
+      "process_variable": "ineq_value_con025",
+      "path": "magnets.peak_tf_field_t",
+      "unit": "T",
+      "reference": 11.179707523532316,
+      "rtol": 0.35,
+      "atol": 0.5
+    },
+    {
+      "name": "cs_startup_flux_required",
+      "process_variable": "vs_plasma_ramp_required",
+      "path": "magnets.cs_startup_flux_required_wb",
+      "unit": "Wb",
+      "reference": 279.0949824023401,
+      "rtol": 1.0,
+      "atol": 100.0
+    },
+    {
+      "name": "capital_cost",
+      "process_variable": "capcost",
+      "path": "economics.total_capital_cost_busd",
+      "unit": "BUSD",
+      "reference": 10.805766441973922,
+      "rtol": 0.75,
+      "atol": 2.0
+    },
+    {
+      "name": "coe",
+      "process_variable": "coe",
+      "path": "economics.coe_usd_mwh",
+      "unit": "USD/MWh",
+      "reference": 549.3112329538282,
+      "rtol": 1.0,
+      "atol": 100.0
+    }
+  ]
+}

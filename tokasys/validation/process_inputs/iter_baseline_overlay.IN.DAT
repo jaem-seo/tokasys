@@ -1,0 +1,43 @@
+* ITER baseline-like scalar overrides for a PROCESS evaluation run.
+*
+* This is not an official PROCESS ITER regression case. It starts from
+* large_tokamak_eval.IN.DAT and overrides the main scalar plasma/design
+* conditions to approximate an ITER baseline burning-plasma scenario.
+
+runtitle = ITER baseline-like tokamak for TokaSys comparison
+
+* Keep PROCESS in equality-solve/evaluation mode inherited from the base file.
+* Plant-level economic quantities are not the main validation target here.
+p_plant_electric_net_required_mw = 1.0
+p_fusion_total_max_mw = 1000.0
+p_hcd_injected_max = 100.0
+
+* ITER baseline-like plasma geometry and field.
+rmajor = 6.2
+aspect = 3.1
+kappa = 1.8
+triang = 0.35
+b_plasma_toroidal_on_axis = 5.3
+* Use PROCESS' Sauter geometric current scaling for this ITER-like shaped
+* plasma. q95 = 3 gives Ip close to 15 MA for this geometry/field.
+i_plasma_current = 4
+q95 = 2.5
+
+* PROCESS solves density and temperature from beta and global power balance.
+beta_total_vol_avg = 0.015
+p_hcd_primary_extra_heat_mw = 0.0
+
+* Profile knobs for comparison with TokaSys process_pedestal profiles.
+i_plasma_pedestal = 1
+alphan = 1.0
+alphat = 1.45
+tbeta = 2.0
+radius_plasma_pedestal_density_norm = 0.94
+radius_plasma_pedestal_temp_norm = 0.94
+f_nd_plasma_pedestal_greenwald = 0.85
+f_nd_plasma_separatrix_greenwald = 0.5
+temp_plasma_pedestal_kev = 4.5
+temp_plasma_separatrix_kev = 0.1
+
+* Keep a generous density upper-limit scale for this generated comparison case.
+f_nd_plasma_electron_limit_max = 1.3

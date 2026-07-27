@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tokasys"
+version = "0.1.0"
+description = "End-to-end differentiable 0D tokamak power-plant systems-code skeleton"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "jax>=0.4.30",
+  "matplotlib>=3.8",
+  "numpy>=1.26",
+  "scipy>=1.11",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tokasys*"]
+
+[tool.setuptools.package-data]
+tokasys = ["validation/reference_cases/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q -p no:capture"

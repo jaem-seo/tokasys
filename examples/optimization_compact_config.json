@@ -1,0 +1,216 @@
+{
+  // Objectives are summed directly for SLSQP. Enable one or more terms.
+  "objectives": {
+    // Minimize major radius; objective contribution is weight * R0 [m].
+    "major_radius": { "enabled": true, "weight": 0.1 },
+    // Minimize cost of electricity; objective contribution is weight * COE [USD/MWh].
+    "coe": { "enabled": false, "weight": 0.01 },
+    // Maximize net electric power; objective contribution is -weight * Pnet [MW].
+    "negative_net_power": { "enabled": false, "weight": 0.001 }
+  },
+
+  // Static/discrete reactor model choices. These are not optimized by SLSQP.
+  "reactor_config": {
+    // Energy closure mode: "full_space", "self_consistent", or "fixed_point".
+    "energy_closure_mode": "full_space",
+    // Plasma profile model: "tokasys", "process_parabolic", or "process_pedestal".
+    "plasma_profile_model": "tokasys",
+    // PROCESS density peaking exponent alphan.
+    "process_profile_alphan": 0.9,
+    // PROCESS temperature peaking exponent alphat.
+    "process_profile_alphat": 1.4,
+    // PROCESS pedestal temperature second exponent tbeta.
+    "process_profile_tbeta": 2.0,
+    // PROCESS density pedestal top radius rho_ped,n.
+    "process_density_pedestal_radius": 0.95,
+    // PROCESS temperature pedestal top radius rho_ped,T.
+    "process_temperature_pedestal_radius": 0.95,
+    // PROCESS pedestal density as a fraction of Greenwald density.
+    "process_density_pedestal_greenwald_fraction": 0.8,
+    // PROCESS separatrix density as a fraction of Greenwald density.
+    "process_density_separatrix_greenwald_fraction": 0.1,
+    // PROCESS pedestal electron temperature [keV].
+    "process_temperature_pedestal_keV": 4.5,
+    // PROCESS separatrix electron temperature [keV].
+    "process_temperature_separatrix_keV": 0.1,
+    // Fully non-inductive steady-state operation: true
+    "steady_state": false,
+    // TF superconductor: 0 = REBCO, 1 = Nb3Sn.
+    "tf_superconductor_id": 0,
+    // PF superconductor: 0 = REBCO, 1 = Nb3Sn, 2 = NbTi.
+    "pf_superconductor_id": 0,
+    // CS superconductor: 0 = REBCO, 1 = Nb3Sn, 2 = NbTi.
+    "cs_superconductor_id": 0,
+    // Blanket concept: 0 = LiPb/WCLL, 1 = FLiBe, 2 = HCPB.
+    "blanket_concept_id": 0,
+    // Divertor heat-load model: 0 = fixed lambda, 1 = Eich-like Bp scaling.
+    "divertor_heat_load_model_id": 1
+  },
+
+  // Technology/model parameters. These are fixed during one SLSQP run.
+  "technology": {
+    // Fraction of the per-coil toroidal pitch available to the TF coil at the inboard leg.
+    "tf_coil_toroidal_pack_fraction": 0.65,
+    // Fraction of the CS radial build assigned to structural material.
+    "cs_structural_fraction": 0.60
+  },
+
+  // Initial design variables. Uncomment or add entries here to change the starting point.
+  "design": {
+    "major_radius_m": 4.0
+  },
+
+  // Lower/upper limits for optimized design variables.
+  "bounds": {
+    // Major radius [m].
+    "major_radius_m": { "lower": 2.0, "upper": 5.5 },
+    // Aspect ratio R/a.
+    "aspect_ratio": { "lower": 2.0, "upper": 4.5 },
+    // Plasma elongation.
+    "elongation": { "lower": 1.4, "upper": 2.2 },
+    // Plasma triangularity.
+    "triangularity": { "lower": 0.05, "upper": 0.65 },
+    // On-axis toroidal field [T].
+    "toroidal_field_t": { "lower": 1.0, "upper": 10.0 },
+    // Plasma current [MA].
+    "plasma_current_ma": { "lower": 1.0, "upper": 20.0 },
+    // Greenwald density fraction.
+    "greenwald_fraction": { "lower": 0.40, "upper": 1.05 },
+    // Target volume-averaged temperature used by the profile/closure model [keV].
+    "target_temperature_keV": { "lower": 6.0, "upper": 20.0 },
+    // IPB98 confinement multiplier.
+    "confinement_h98": { "lower": 0.70, "upper": 1.30 },
+    // Auxiliary heating injected into plasma [MW].
+    "auxiliary_heating_mw": { "lower": 0.0, "upper": 100.0 },
+    // Current-drive injected power [MW].
+    "current_drive_power_mw": { "lower": 0.0, "upper": 100.0 },
+    // Inboard first-wall thickness [m].
+    "inboard_first_wall_thickness_m": { "lower": 0.02, "upper": 0.20 },
+    // Outboard first-wall thickness [m].
+    "outboard_first_wall_thickness_m": { "lower": 0.02, "upper": 0.20 },
+    // Inboard blanket thickness [m].
+    "inboard_blanket_thickness_m": { "lower": 0.40, "upper": 1.50 },
+    // Outboard blanket thickness [m].
+    "outboard_blanket_thickness_m": { "lower": 0.40, "upper": 1.50 },
+    // Inboard shield thickness [m].
+    "inboard_shield_thickness_m": { "lower": 0.30, "upper": 1.50 },
+    // Outboard shield thickness [m].
+    "outboard_shield_thickness_m": { "lower": 0.30, "upper": 1.50 },
+    // TF coil radial thickness [m].
+    "tf_coil_thickness_m": { "lower": 0.30, "upper": 2.00 },
+    // PF coil radial/vertical thickness [m].
+    "pf_coil_thickness_m": { "lower": 0.30, "upper": 2.00 },
+    // CS radial build from machine centerline [m].
+    "cs_thickness_m": { "lower": 0.30, "upper": 3.00 }
+  },
+
+  // Lower/upper limits for full-space closure variables.
+  "closure_bounds": {
+    // Stored plasma energy [MJ].
+    "stored_energy_mj": { "lower": 10.0, "upper": 1000.0 },
+    // Transport loss power [MW].
+    "transport_loss_mw": { "lower": 1.0, "upper": 1000.0 },
+    // Bootstrap current [MA].
+    "bootstrap_current_ma": { "lower": 0.0, "upper": 20.0 },
+    // Current-drive current [MA].
+    "current_drive_current_ma": { "lower": 0.0, "upper": 20.0 },
+    // Net electric power [MW].
+    "net_electric_power_mw": { "lower": -500.0, "upper": 3000.0 },
+    // Peak TF field [T].
+    "tf_peak_field_t": { "lower": 1.0, "upper": 35.0 },
+    // Tritium breeding ratio.
+    "tbr": { "lower": 0.1, "upper": 2.5 },
+    // Peak divertor heat flux [MW/m2].
+    "divertor_heat_flux_mw_m2": { "lower": 0.01, "upper": 50.0 }
+  },
+
+  // Equality constraints use normalized residuals. True means use as a hard SLSQP equality.
+  "equalities": {
+    // Plasma input power equals radiation plus transport loss; auto-excluded in self_consistent mode.
+    "plasma_power_balance": { "enabled": true },
+    // Total plasma current equals bootstrap plus current-drive current.
+    "plasma_current_balance": { "enabled": false },
+    // Net electric power equals the technology target.
+    "target_net_power": { "enabled": false, "target": 500.0 },
+    // Closure stored energy equals model stored energy; auto-excluded in full_space mode.
+    "stored_energy_closure": { "enabled": true },
+    // Closure transport loss equals IPB98 transport loss.
+    "transport_loss_closure": { "enabled": true },
+    // Closure bootstrap current equals model bootstrap current.
+    "bootstrap_current_closure": { "enabled": true },
+    // Closure current-drive current equals model current-drive current.
+    "current_drive_current_closure": { "enabled": true },
+    // Closure net electric power equals model net electric power.
+    "net_electric_power_closure": { "enabled": false },
+    // Closure peak TF field equals model peak TF field.
+    "tf_peak_field_closure": { "enabled": true },
+    // Closure tritium breeding ratio equals model TBR.
+    "tbr_closure": { "enabled": false },
+    // Closure divertor heat flux equals model peak divertor heat flux.
+    "divertor_heat_flux_closure": { "enabled": true }
+  },
+
+  // Inequality constraints use positive-is-feasible normalized margins.
+  "inequalities": {
+    // Safety factor q95 must exceed the minimum.
+    "q95": { "enabled": true, "limit": 3.0 },
+    // Normalized beta must stay below the beta_N limit.
+    "beta_n": { "enabled": true, "limit": 3.0 },
+    // Greenwald fraction must stay below the maximum.
+    "greenwald": { "enabled": true, "limit": 0.95 },
+    // Plasma Q = fusion power / external heating power must exceed the minimum.
+    "fusion_gain": { "enabled": true, "limit": 5.0 },
+    // Net electric power must exceed the target; useful as an alternative to target_net_power equality.
+    "target_net_power": { "enabled": false, "limit": 500.0 },
+    // Inboard TF inner radius must stay outside the CS outer radius.
+    "inboard_space": { "enabled": true },
+    // Peak TF field must stay below the magnet field limit.
+    "tf_peak_field": { "enabled": true, "limit": 20.0 },
+    // TF engineering current density must stay below the allowable value.
+    "tf_current_density": { "enabled": true, "limit": 70000000.0 },
+    // TF stress must stay below the allowable stress.
+    "tf_stress": { "enabled": true, "limit": 700000000.0 },
+    // Nuclear heating to cold TF structures must stay below the cryogenic limit.
+    "tf_nuclear_heat": { "enabled": true, "limit": 0.05 },
+    // PF equilibrium ampere-turn demand must stay below the available limit.
+    "pf_equilibrium_ampere_turns": { "enabled": true, "limit": 80000000.0 },
+    // Maximum PF coil engineering current density must stay below material Jc(B,T,strain) limit.
+    "pf_current_density": { "enabled": true },
+    // Maximum local PF coil field must stay below the coil field limit.
+    "pf_peak_field": { "enabled": true, "limit": 12.0 },
+    // Maximum PF coil structural stress proxy must stay below the allowable stress.
+    "pf_stress": { "enabled": true, "limit": 500000000.0 },
+    // CS flux swing capacity must exceed required volt-seconds.
+    "cs_flux_swing": { "enabled": false },
+    // CS peak field must stay below the field limit.
+    "cs_peak_field": { "enabled": true, "limit": 16.0 },
+    // CS current density must stay below material Jc(B,T,strain) limit.
+    "cs_current_density": { "enabled": true },
+    // CS stress must stay below the allowable stress.
+    "cs_stress": { "enabled": true, "limit": 700000000.0 },
+    // Tritium breeding ratio must exceed the minimum.
+    "tbr": { "enabled": true, "limit": 1.10 },
+    // Fast-neutron fluence incident on TF structures must stay below the lifetime limit.
+    "tf_fluence": { "enabled": false, "limit": 1.0e22 },
+    // TF damage proxy must stay below the allowable displacement damage.
+    "tf_dpa": { "enabled": false, "limit": 1.0e-3 },
+    // Tritium inventory doubling time must stay below the fuel-cycle target.
+    "tritium_doubling_time": { "enabled": false, "limit": 5.0 },
+    // First-wall surface heat load must stay below the first-wall cooling limit.
+    "first_wall_heat_load": { "enabled": false, "limit": 1.0 },
+    // Peak divertor heat flux must stay below the heat-flux limit.
+    "divertor_heat_flux": { "enabled": true, "limit": 15.0 },
+    // Divertor target surface temperature must stay below the reduced cooling limit.
+    "divertor_target_temperature": { "enabled": true, "limit": 1200.0 },
+    // Divertor lifetime must exceed the minimum replacement interval target.
+    "divertor_lifetime": { "enabled": true, "limit": 1.0 },
+    // Recirculating fraction must stay below the maximum.
+    "recirculating_fraction": { "enabled": false, "limit": 0.45 }
+  },
+
+  // Reporting tolerances used to label constraints as OK or VIOLATED in the printed report.
+  "tolerances": {
+    "equality": 1.0e-3,
+    "inequality": 1.0e-8
+  }
+}

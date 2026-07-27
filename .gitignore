@@ -1,0 +1,9 @@
+external/
+.venv-process/
+process_runs/
+*.egg-info/
+.pytest_cache/
+.DS_Store
+__pycache__/
+*.py[cod]
+examples/*_diagnostics.png
