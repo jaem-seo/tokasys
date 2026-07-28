@@ -75,12 +75,26 @@ assumptions for the current differentiable 0D/profile tokamak system code.
   Status: reduced accounting model.
 - Availability: component-lifetime/RAMI-inspired reduced model. Status: proxy;
   no stochastic failure/repair simulation.
-- Cost/COE: parametric scaling with component volumes, stored energy and
+- Cost model 0: parametric scaling with component volumes, stored energy and
   wall-plug systems. Status: calibrated surrogate; not a bottom-up cost model.
+- Cost model 1: whole-plant `C/C_ref = (P/P_ref)^0.6` capacity scaling,
+  anchored to the model-0 component base costs at 1000 MW gross electric
+  capacity. Status: standard conceptual economies-of-scale law.
+- Cost model 2: Jo et al., *Energies* 14, 6817 (2021), Section 2.3,
+  Equations (8)-(14) and Tables 2-3
+  (https://doi.org/10.3390/en14206817). Published unit costs and plant-level
+  equations are used directly in constant 2010 USD. The paper obtained
+  component length, mass and fusion-island volume from a separate coupled
+  systems analysis; TokaSys reconstructs those inputs from its D-coil
+  perimeter, a documented 50 kA conductor assumption, component volumes,
+  effective material densities and a cylindrical fusion-island envelope.
+  As in the paper, the blanket material costing assumes a PbLi/FMS/SiC
+  blanket, independently of TokaSys' blanket-concept selector.
+  Status: reference-backed cost equations with explicit geometry/material
+  adapters, not a construction-grade bottom-up estimate.
 
 ## Validation
 
 - PROCESS reference comparisons use mapped regression cases from the UKAEA
   PROCESS repository. Status: useful for system-code consistency checks, but not
   a one-to-one replacement for PROCESS' full physics and engineering stack.
-

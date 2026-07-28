@@ -49,6 +49,7 @@
     },
     "config": {
       "steady_state": false,
+      "cost_model_id": 0,
       "energy_closure_mode": "full_space",
       "plasma_profile_model": "process_pedestal",
       "process_profile_alphan": 1.0,

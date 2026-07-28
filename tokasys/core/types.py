@@ -222,6 +222,7 @@ class ReactorConfig(NamedTuple):
 
     steady_state: bool = True
     objective_id: int = 0  # 0 radius, 1 COE, 2 negative net power
+    cost_model_id: int = 0  # 0 legacy proxy, 1 capacity scaling, 2 Jo et al. (2021)
     energy_closure_mode: str = "self_consistent"  # full_space, self_consistent, fixed_point
     energy_closure_iterations: int = 5
     plasma_profile_model: str = "tokasys"  # tokasys, process_parabolic, process_pedestal

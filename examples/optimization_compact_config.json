@@ -43,6 +43,9 @@
     "cs_superconductor_id": 0,
     // Blanket concept: 0 = LiPb/WCLL, 1 = FLiBe, 2 = HCPB.
     "blanket_concept_id": 0,
+    // Cost model: 0 = legacy proxy, 1 = n=0.6 capacity scaling,
+    // 2 = Jo et al. (2021).
+    "cost_model_id": 0,
     // Divertor heat-load model: 0 = fixed lambda, 1 = Eich-like Bp scaling.
     "divertor_heat_load_model_id": 1
   },

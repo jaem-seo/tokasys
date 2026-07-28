@@ -78,6 +78,17 @@ def print_reactor_config() -> None:
         _id_label(problem.config.blanket_concept_id, {0: "LiPb/WCLL", 1: "FLiBe", 2: "HCPB"}),
     )
     print(
+        "cost_model_id:",
+        _id_label(
+            problem.config.cost_model_id,
+            {
+                0: "legacy proxy",
+                1: "n=0.6 capacity scaling",
+                2: "Jo et al. (2021)",
+            },
+        ),
+    )
+    print(
         "divertor_heat_load_model_id:",
         _id_label(
             problem.config.divertor_heat_load_model_id,

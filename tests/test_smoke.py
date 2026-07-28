@@ -589,6 +589,7 @@ def test_optimization_config_file_selects_terms(tmp_path):
             "pf_superconductor_id": 2,
             "cs_superconductor_id": 2,
             "blanket_concept_id": 2,
+            "cost_model_id": 2,
             "divertor_heat_load_model_id": 0
           },
           "bounds": {
@@ -627,6 +628,7 @@ def test_optimization_config_file_selects_terms(tmp_path):
     assert custom.config.pf_superconductor_id == 2
     assert custom.config.cs_superconductor_id == 2
     assert custom.config.blanket_concept_id == 2
+    assert custom.config.cost_model_id == 2
     assert custom.config.divertor_heat_load_model_id == 0
     assert float(custom.bounds.lower.major_radius_m) == pytest.approx(5.0)
     assert float(custom.bounds.upper.major_radius_m) == pytest.approx(11.0)

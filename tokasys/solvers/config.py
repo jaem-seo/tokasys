@@ -327,6 +327,11 @@ def apply_optimization_config(
         ),
     )
     config = problem.config._replace(**data.get("reactor_config", {}))
+    if config.cost_model_id not in (0, 1, 2):
+        raise ValueError(
+            "reactor_config.cost_model_id must be 0 (legacy), "
+            "1 (capacity scaling), or 2 (Jo et al. 2021)."
+        )
     technology = problem.technology._replace(**data.get("technology", {}))
     technology = _technology_with_constraint_values(
         technology,

@@ -27,7 +27,7 @@ def _cv(*values: float) -> ClosureVariables:
 
 
 def default_config() -> ReactorConfig:
-    return ReactorConfig(steady_state=True, objective_id=0)
+    return ReactorConfig(steady_state=True, objective_id=0, cost_model_id=0)
 
 
 def default_numerics() -> NumericalOptions:
