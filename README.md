@@ -48,7 +48,7 @@ python -m examples.run_optimization
 python -m examples.run_optimization --config examples/optimization_reactor_config.json
 ```
 
-The output design figure will be saved at examples/
+The output design figure will be saved at `examples/`
 
 ## Test
 
