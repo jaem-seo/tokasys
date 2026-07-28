@@ -41,7 +41,7 @@ def solve_slsqp(
 ) -> DesignSolution:
     """Solve the normalized full-space design problem.
 
-    The current skeleton uses full-space design plus closure variables. Equality
+    The current version uses full-space design plus closure variables. Equality
     residuals include plant balances and closure consistency checks; inequality
     margins. SLSQP is used only as the nonlinear-program driver; all objective
     and constraint derivatives are supplied by JAX.

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tokasys"
 version = "0.1.0"
-description = "End-to-end differentiable 0D tokamak power-plant systems-code skeleton"
+description = "End-to-end differentiable 0D tokamak power-plant systems code"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

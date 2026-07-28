@@ -1,8 +1,7 @@
-# TokaSys skeleton
+# TokaSys
 
 `TokaSys` is a deliberately compact, end-to-end differentiable 0D tokamak
-power-plant systems-code skeleton. It is intended as a clean starting point for
-reactor design research, not as a validated engineering design tool.
+power-plant systems code.
 
 The package connects:
 
@@ -42,6 +41,14 @@ python -m examples.run_baseline
 ```bash
 python -m examples.run_optimization
 ```
+
+## Run a constrained design optimization with a prescribed configuration json file
+
+```bash
+python -m examples.run_optimization --config examples/optimization_reactor_config.json
+```
+
+The output design figure will be saved at examples/
 
 ## Test
 
