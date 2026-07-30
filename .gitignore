@@ -1,6 +1,7 @@
 external/
 .venv-process/
 process_runs/
+process.log
 *.egg-info/
 .pytest_cache/
 .DS_Store
