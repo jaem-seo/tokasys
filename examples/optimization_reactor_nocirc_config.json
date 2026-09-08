@@ -63,18 +63,6 @@
     // "major_radius_m": 6.2
   },
 
-  // Initial values for the full-space closure variables.
-  "closure": {
-    "stored_energy_mj": 650.0,
-    "transport_loss_mw": 280.0,
-    "bootstrap_current_ma": 2.1,
-    "current_drive_current_ma": 6.2,
-    "net_electric_power_mw": 540.0,
-    "tf_peak_field_t": 17.4,
-    "tbr": 1.20,
-    "divertor_heat_flux_mw_m2": 4.25
-  },
-
   // Lower/upper limits for optimized design variables.
   "bounds": {
     // Major radius [m].
@@ -220,7 +208,7 @@
     // Divertor lifetime must exceed the minimum replacement interval target.
     "divertor_lifetime": { "enabled": false, "limit": 1.0 },
     // Recirculating fraction must stay below the maximum.
-    "recirculating_fraction": { "enabled": true, "limit": 0.45 }
+    "recirculating_fraction": { "enabled": false, "limit": 0.45 }
   },
 
   // Reporting tolerances used to label constraints as OK or VIOLATED in the printed report.

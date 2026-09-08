@@ -61,32 +61,21 @@
   // Initial design variables. Uncomment or add entries here to change the starting point.
   "design": {
     // "major_radius_m": 6.2
-  },
-
-  // Initial values for the full-space closure variables.
-  "closure": {
-    "stored_energy_mj": 650.0,
-    "transport_loss_mw": 280.0,
-    "bootstrap_current_ma": 2.1,
-    "current_drive_current_ma": 6.2,
-    "net_electric_power_mw": 540.0,
-    "tf_peak_field_t": 17.4,
-    "tbr": 1.20,
-    "divertor_heat_flux_mw_m2": 4.25
+    "aspect_ratio": 2.0
   },
 
   // Lower/upper limits for optimized design variables.
   "bounds": {
     // Major radius [m].
-    "major_radius_m": { "lower": 4.0, "upper": 12.0 },
+    "major_radius_m": { "lower": 1.0, "upper": 8.0 },
     // Aspect ratio R/a.
-    "aspect_ratio": { "lower": 2.0, "upper": 4.5 },
+    "aspect_ratio": { "lower": 1.2, "upper": 2.0 },
     // Plasma elongation.
     "elongation": { "lower": 1.4, "upper": 2.2 },
     // Plasma triangularity.
     "triangularity": { "lower": 0.05, "upper": 0.65 },
     // On-axis toroidal field [T].
-    "toroidal_field_t": { "lower": 3.0, "upper": 10.0 },
+    "toroidal_field_t": { "lower": 2.0, "upper": 10.0 },
     // Plasma current [MA].
     "plasma_current_ma": { "lower": 7.0, "upper": 30.0 },
     // Greenwald density fraction.
@@ -94,7 +83,7 @@
     // Target volume-averaged temperature used by the profile/closure model [keV].
     "target_temperature_keV": { "lower": 6.0, "upper": 20.0 },
     // IPB98 confinement multiplier.
-    "confinement_h98": { "lower": 0.70, "upper": 1.30 },
+    "confinement_h98": { "lower": 1.00, "upper": 1.60 },
     // Auxiliary heating injected into plasma [MW].
     "auxiliary_heating_mw": { "lower": 0.0, "upper": 250.0 },
     // Current-drive injected power [MW].
@@ -104,11 +93,11 @@
     // Outboard first-wall thickness [m].
     "outboard_first_wall_thickness_m": { "lower": 0.02, "upper": 0.20 },
     // Inboard blanket thickness [m].
-    "inboard_blanket_thickness_m": { "lower": 0.40, "upper": 1.50 },
+    "inboard_blanket_thickness_m": { "lower": 0.10, "upper": 1.50 },
     // Outboard blanket thickness [m].
     "outboard_blanket_thickness_m": { "lower": 0.40, "upper": 1.50 },
     // Inboard shield thickness [m].
-    "inboard_shield_thickness_m": { "lower": 0.30, "upper": 1.50 },
+    "inboard_shield_thickness_m": { "lower": 0.10, "upper": 1.50 },
     // Outboard shield thickness [m].
     "outboard_shield_thickness_m": { "lower": 0.30, "upper": 1.50 },
     // TF coil radial thickness [m].
@@ -170,13 +159,13 @@
     // Safety factor q95 must exceed the minimum.
     "q95": { "enabled": true, "limit": 3.0 },
     // Normalized beta must stay below the beta_N limit.
-    "beta_n": { "enabled": true, "limit": 3.0 },
+    "beta_n": { "enabled": true, "limit": 5.0 },
     // Greenwald fraction must stay below the maximum.
     "greenwald": { "enabled": true, "limit": 0.95 },
     // Plasma Q = fusion power / external heating power must exceed the minimum.
-    "fusion_gain": { "enabled": true, "limit": 10.0 },
+    "fusion_gain": { "enabled": true, "limit": 5.0 },
     // Net electric power must exceed the target; useful as an alternative to target_net_power equality.
-    "target_net_power": { "enabled": true, "target": 500.0 },
+    "target_net_power": { "enabled": true, "target": 100.0 },
     // Inboard TF inner radius must stay outside the CS outer radius.
     "inboard_space": { "enabled": true },
     // Peak TF field must stay below the magnet field limit.
@@ -220,7 +209,7 @@
     // Divertor lifetime must exceed the minimum replacement interval target.
     "divertor_lifetime": { "enabled": false, "limit": 1.0 },
     // Recirculating fraction must stay below the maximum.
-    "recirculating_fraction": { "enabled": true, "limit": 0.45 }
+    "recirculating_fraction": { "enabled": false, "limit": 0.45 }
   },
 
   // Reporting tolerances used to label constraints as OK or VIOLATED in the printed report.

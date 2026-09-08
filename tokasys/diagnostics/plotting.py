@@ -828,6 +828,7 @@ def plot_radial_build(ax: Any, design: Any, technology: Any, result: Any) -> Non
     ax.axvline(plasma_in, color="#8b0000", linewidth=0.8, linestyle=":", zorder=0)
     ax.axvline(plasma_out, color="#8b0000", linewidth=0.8, linestyle=":", zorder=0)
     ax.set_ylim(-1.05 * drawing_half_height, 1.05 * drawing_half_height)
+    #ax.set_ylim(-12, 12)
     ax.set_ylabel("Z [m]")
     ax.set_xlabel("R [m]")
     ax.set_title("Radial Build Poloidal Section")

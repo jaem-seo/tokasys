@@ -1,4 +1,5 @@
 external/
+outputs/
 .venv-process/
 process_runs/
 process.log
