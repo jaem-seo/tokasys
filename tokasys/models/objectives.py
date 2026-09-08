@@ -13,11 +13,13 @@ Objective = Callable[[DesignVariables, ReactorResult], jnp.ndarray]
 
 
 def major_radius_objective(x: DesignVariables, result: ReactorResult) -> jnp.ndarray:
+    """Return plasma major radius as a quantity to minimize."""
     del result
     return x.major_radius_m
 
 
 def coe_objective(x: DesignVariables, result: ReactorResult) -> jnp.ndarray:
+    """Return levelized cost of electricity as a quantity to minimize."""
     del x
     return result.economics.coe_usd_mwh
 
@@ -26,6 +28,7 @@ def negative_net_power_objective(
     x: DesignVariables,
     result: ReactorResult,
 ) -> jnp.ndarray:
+    """Negate net electric power so minimization maximizes plant output."""
     del x
     return -result.power.net_electric_power_mw
 
@@ -54,6 +57,7 @@ def objective_names(
     config: ReactorConfig,
     optimization: OptimizationConfig,
 ) -> tuple[str, ...]:
+    """Resolve active objective names, including the legacy objective ID."""
     if optimization.objective_terms:
         names = optimization.objective_terms
     else:
@@ -68,6 +72,7 @@ def objective_weights(
     config: ReactorConfig,
     optimization: OptimizationConfig,
 ) -> tuple[float, ...]:
+    """Resolve and validate one scalar weight per active objective term."""
     names = objective_names(config, optimization)
     if not optimization.objective_weights:
         return tuple(DEFAULT_OBJECTIVE_WEIGHTS[name] for name in names)
@@ -86,6 +91,7 @@ def objective_value(
     config: ReactorConfig,
     optimization: OptimizationConfig,
 ) -> jnp.ndarray:
+    """Return the weighted sum of all configured scalar objective terms."""
     values = [
         weight * OBJECTIVE_FUNCTIONS[name](x, result)
         for name, weight in zip(
@@ -103,6 +109,7 @@ def objective_term_values(
     config: ReactorConfig,
     optimization: OptimizationConfig,
 ) -> dict[str, float]:
+    """Return individual weighted objective contributions for reporting."""
     return {
         name: float(weight * OBJECTIVE_FUNCTIONS[name](x, result))
         for name, weight in zip(

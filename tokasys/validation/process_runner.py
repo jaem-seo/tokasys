@@ -159,6 +159,7 @@ _MFILE_LINE_RE = re.compile(r"\s\(([^()]+)\)_+\s+(.+?)\s*$")
 
 
 def _parse_value(text: str) -> Any:
+    """Parse one MFILE token as a quoted string, integer, float, or text."""
     tokens = shlex.split(text, posix=False)
     if not tokens:
         return text.strip()
@@ -186,18 +187,21 @@ def parse_mfile(path: str | Path) -> dict[str, Any]:
 
 
 def _required_float(values: dict[str, Any], name: str) -> float:
+    """Read a required scalar MFILE variable and convert it to float."""
     if name not in values:
         raise KeyError(f"PROCESS MFILE variable {name!r} was not found.")
     return float(values[name])
 
 
 def _optional_float(values: dict[str, Any], name: str, default: float) -> float:
+    """Read an optional scalar MFILE variable or return its fallback."""
     if name not in values:
         return default
     return float(values[name])
 
 
 def _metric_process_variable(values: dict[str, Any], name: str) -> str | None:
+    """Find the available primary or fallback MFILE name for one metric."""
     if name in values:
         return name
     for fallback in PROCESS_METRIC_FALLBACKS.get(name, ()):
@@ -207,6 +211,7 @@ def _metric_process_variable(values: dict[str, Any], name: str) -> str | None:
 
 
 def greenwald_fraction_from_process(values: dict[str, Any]) -> float:
+    """Reconstruct the Greenwald density fraction from PROCESS output scalars."""
     major_radius = _required_float(values, "rmajor")
     aspect = _required_float(values, "aspect")
     plasma_current_ma = _required_float(values, "plasma_current_MA")
@@ -445,6 +450,7 @@ def run_process(
 
 
 def write_reference_json(reference: dict[str, Any], output_path: str | Path) -> Path:
+    """Serialize a generated reference-case mapping as formatted JSON."""
     output = Path(output_path)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(reference, indent=2) + "\n", encoding="utf-8")

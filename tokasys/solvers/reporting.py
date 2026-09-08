@@ -23,6 +23,7 @@ from tokasys.models.objectives import (
 
 
 def _f(value: Any) -> float:
+    """Convert a scalar JAX-compatible value to a Python float."""
     return float(value)
 
 
@@ -32,6 +33,7 @@ def objective_reports(
     config: ReactorConfig,
     optimization: OptimizationConfig,
 ) -> list[dict[str, Any]]:
+    """Describe active objective terms, weights, values, and contributions."""
     design = variables.design
     actual: dict[str, tuple[float, str]] = {
         "major_radius": (_f(design.major_radius_m), "m"),
@@ -64,6 +66,7 @@ def _equality_actuals(
     result: ReactorResult,
     tech: TechnologyParameters,
 ) -> dict[str, tuple[float, str, float, str]]:
+    """Map each equality name to physical left- and right-hand quantities."""
     design = variables.design
     closure = variables.closure
     plasma_power_input = (
@@ -153,6 +156,7 @@ def equality_reports(
     config: ReactorConfig,
     optimization: OptimizationConfig,
 ) -> list[dict[str, Any]]:
+    """Build human-readable rows for active equality constraints."""
     residuals = list(result.residuals)
     actuals = _equality_actuals(variables, result, tech)
     rows = []
@@ -179,6 +183,7 @@ def _inequality_actuals(
     result: ReactorResult,
     tech: TechnologyParameters,
 ) -> dict[str, tuple[float, str, float, str, str]]:
+    """Map each inequality name to its physical value, limit, units, and sense."""
     return {
         "q95": (_f(result.plasma.q95), "", _f(tech.q95_min), "", ">="),
         "beta_n": (_f(result.plasma.beta_n), "", _f(tech.beta_n_limit), "", "<="),
@@ -360,6 +365,7 @@ def inequality_reports(
     tech: TechnologyParameters,
     optimization: OptimizationConfig,
 ) -> list[dict[str, Any]]:
+    """Build human-readable rows for active inequality constraints."""
     margins = list(result.margins)
     actuals = _inequality_actuals(variables.design, result, tech)
     rows = []

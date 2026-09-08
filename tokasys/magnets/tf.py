@@ -46,6 +46,12 @@ def evaluate_magnets(
     tech: TechnologyParameters,
     config: ReactorConfig,
 ) -> MagnetState:
+    """Evaluate coupled TF, PF, and CS electromagnetic and cryogenic states.
+
+    The returned state includes coil placement, fields, ampere-turns, material
+    current-density limits, stress proxies, flux swing, stored energy, nuclear
+    heating, and the corresponding cryogenic electric demand.
+    """
     r_tf = geom.inboard_tf_outer_radius_m
     safe_r_tf = jnp.maximum(r_tf, 0.05)
     peak_field = x.toroidal_field_t * x.major_radius_m / safe_r_tf

@@ -24,6 +24,7 @@ from tokasys.models.objectives import DEFAULT_OBJECTIVE_WEIGHTS, OBJECTIVE_FUNCT
 
 
 def _strip_json_comments(text: str) -> str:
+    """Remove line and block comments without altering quoted JSON strings."""
     output: list[str] = []
     i = 0
     in_string = False
@@ -68,6 +69,7 @@ def _enabled_names(
     *,
     section_name: str,
 ) -> tuple[str, ...]:
+    """Validate section keys and return enabled names in canonical order."""
     unknown = tuple(name for name in section if name not in valid_names)
     if unknown:
         raise ValueError(f"Unknown {section_name} name(s): {unknown}")
@@ -75,6 +77,7 @@ def _enabled_names(
 
 
 def _entry_enabled(entry: Any) -> bool:
+    """Interpret either a Boolean or an ``enabled`` mapping as a flag."""
     if isinstance(entry, dict):
         return bool(entry.get("enabled", False))
     return bool(entry)
@@ -84,6 +87,7 @@ def _objective_weights(
     section: dict[str, Any],
     objective_terms: tuple[str, ...],
 ) -> tuple[float, ...]:
+    """Read finite weights for active terms, falling back to standard scales."""
     weights = []
     for name in objective_terms:
         entry = section.get(name, False)
@@ -100,6 +104,7 @@ def _objective_weights(
 
 
 def _constraint_value_overrides(data: dict[str, Any]) -> dict[str, float]:
+    """Collect target and limit overrides from supported config layouts."""
     values: dict[str, float] = {}
     for section_name in ("targets", "limits"):
         for name, value in data.get(section_name, {}).items():
@@ -142,6 +147,7 @@ _CONSTRAINT_VALUE_TO_TECH_FIELD = {
 
 
 def _technology_with_constraint_values(obj: Any, values: dict[str, float]) -> Any:
+    """Apply named constraint targets and limits to technology parameters."""
     replacements: dict[str, float] = {}
     unknown = []
     for name, value in values.items():
@@ -159,6 +165,7 @@ def _technology_with_constraint_values(obj: Any, values: dict[str, float]) -> An
 
 
 def _expand_legacy_build_fields(values: dict[str, Any]) -> dict[str, Any]:
+    """Expand legacy symmetric build values into inboard/outboard fields."""
     expanded = dict(values)
     legacy_pairs = {
         "first_wall_thickness_m": (
@@ -184,6 +191,7 @@ def _expand_legacy_build_fields(values: dict[str, Any]) -> dict[str, Any]:
 
 
 def _replace_array_fields(obj: Any, values: dict[str, Any]) -> Any:
+    """Replace selected NamedTuple fields after converting values to JAX arrays."""
     values = _expand_legacy_build_fields(values)
     return obj._replace(
         **{name: jnp.asarray(value, dtype=float) for name, value in values.items()}
@@ -191,6 +199,7 @@ def _replace_array_fields(obj: Any, values: dict[str, Any]) -> Any:
 
 
 def _validate_bounds(lower: Any, upper: Any, *, label: str) -> None:
+    """Reject any variable whose upper bound does not exceed its lower bound."""
     invalid = [
         name
         for name in lower._fields
@@ -201,6 +210,7 @@ def _validate_bounds(lower: Any, upper: Any, *, label: str) -> None:
 
 
 def _validate_inside_bounds(values: Any, lower: Any, upper: Any, *, label: str) -> None:
+    """Reject configured initial values that lie outside their bounds."""
     outside = [
         name
         for name in values._fields
@@ -217,6 +227,7 @@ def _validate_inside_bounds(values: Any, lower: Any, upper: Any, *, label: str) 
 
 
 def _bound_values(section: dict[str, Any], kind: str) -> dict[str, Any]:
+    """Extract lower or upper values from nested and per-variable layouts."""
     values = dict(section.get(kind, {}))
     for name, entry in section.items():
         if name in {"lower", "upper"}:
@@ -230,6 +241,7 @@ def _configured_bounds(
     problem: ReactorProblem,
     data: dict[str, Any],
 ) -> tuple[VariableBounds, ReactorVariableBounds]:
+    """Merge design and closure bounds from all supported config sections."""
     design_lower = problem.variable_bounds.lower.design
     design_upper = problem.variable_bounds.upper.design
     closure_lower = problem.variable_bounds.lower.closure
@@ -281,6 +293,7 @@ def _configured_bounds(
 
 
 def load_optimization_config(path: str | Path) -> dict[str, Any]:
+    """Load a JSON or comment-containing JSONC optimization configuration."""
     config_path = Path(path)
     return json.loads(_strip_json_comments(config_path.read_text(encoding="utf-8")))
 
@@ -289,6 +302,12 @@ def apply_optimization_config(
     problem: ReactorProblem,
     path: str | Path,
 ) -> ReactorProblem:
+    """Apply a configuration file to a baseline reactor optimization problem.
+
+    Objective selection and weights, active constraints, target values, model
+    options, technology assumptions, initial variables, and bounds are merged
+    into an immutable ``ReactorProblem`` and validated before it is returned.
+    """
     data = load_optimization_config(path)
     objective_terms = _enabled_names(
         data.get("objectives", {}),

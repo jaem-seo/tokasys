@@ -17,6 +17,7 @@ def evaluate_geometry(
     tech: TechnologyParameters,
     numerics: NumericalOptions,
 ) -> GeometryState:
+    """Evaluate shaped plasma geometry, radial build, and profile volume weights."""
     r0 = x.major_radius_m
     a = r0 / x.aspect_ratio
     eps = a / r0

@@ -53,6 +53,7 @@ def radial_build_ledger(
     tech: TechnologyParameters,
     minor_radius_m: jnp.ndarray,
 ) -> RadialBuild:
+    """Construct the inboard and outboard component radii from layer thicknesses."""
     inboard_lcfs_radius = x.major_radius_m - minor_radius_m
     outboard_lcfs_radius = x.major_radius_m + minor_radius_m
 

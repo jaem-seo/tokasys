@@ -13,7 +13,9 @@ from tokasys.models.reactor import evaluate_reactor
 
 
 def make_vector_functions(problem: ReactorProblem):
+    """Build JIT-compiled reactor, objective, constraint, and derivative callables."""
     def result_fn(u: jnp.ndarray):
+        """Evaluate the reactor from a normalized optimizer vector."""
         variables = denormalize_reactor_variables(u, problem.variable_bounds)
         return evaluate_reactor(
             variables,
@@ -23,6 +25,7 @@ def make_vector_functions(problem: ReactorProblem):
         )
 
     def objective_fn(u: jnp.ndarray) -> jnp.ndarray:
+        """Evaluate the configured scalar objective in normalized coordinates."""
         variables = denormalize_reactor_variables(u, problem.variable_bounds)
         result = evaluate_reactor(
             variables,
@@ -38,9 +41,11 @@ def make_vector_functions(problem: ReactorProblem):
         )
 
     def equality_fn(u: jnp.ndarray) -> jnp.ndarray:
+        """Evaluate active equality residuals in normalized coordinates."""
         return equality_vector(result_fn(u), problem.config, problem.optimization)
 
     def inequality_fn(u: jnp.ndarray) -> jnp.ndarray:
+        """Evaluate active positive-is-feasible margins in normalized coordinates."""
         return inequality_vector(result_fn(u), problem.optimization)
 
     return {

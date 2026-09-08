@@ -117,6 +117,7 @@ def evaluate_nuclear_island(
     tech: TechnologyParameters,
     config: ReactorConfig,
 ) -> NuclearState:
+    """Evaluate blanket heating, shielding, TBR, damage, and tritium inventory."""
     (
         coverage,
         energy_multiplication,

@@ -26,6 +26,7 @@ from tokasys.core.types import (
 
 
 def profile_average(values: jnp.ndarray, weights: jnp.ndarray) -> jnp.ndarray:
+    """Return a volume-weighted average over the fixed radial grid."""
     return jnp.sum(values * weights)
 
 
@@ -36,6 +37,7 @@ def stored_energy_from_temperature_profile_mj(
     tech: TechnologyParameters,
     volume_m3: jnp.ndarray,
 ) -> jnp.ndarray:
+    """Integrate electron and ion thermal energy over the plasma volume [MJ]."""
     density_factor = electron_density_m3 * (
         1.0 + tech.fuel_ion_fraction * tech.ion_to_electron_temperature_ratio
     )
@@ -57,6 +59,7 @@ def _stored_energy_scaled_temperature_profile(
     tech: TechnologyParameters,
     volume_m3: jnp.ndarray,
 ) -> tuple[jnp.ndarray, jnp.ndarray]:
+    """Scale a core temperature shape to match a requested stored energy."""
     density_factor = electron_density_m3 * (
         1.0 + tech.fuel_ion_fraction * tech.ion_to_electron_temperature_ratio
     )
@@ -229,6 +232,7 @@ def density_at_normalized_radius_m3(
     pedestal_width: jnp.ndarray,
     config: ReactorConfig,
 ) -> jnp.ndarray:
+    """Evaluate the normalized density profile at an arbitrary radial location."""
     rho_ped_top = jnp.maximum(1.0 - pedestal_width, 1.0e-3)
     pedestal_top_shape = pedestal_tanh_shape(
         rho_ped_top,
@@ -249,6 +253,7 @@ def density_at_normalized_radius_m3(
     )
 
     def shaped_density(rho: jnp.ndarray) -> jnp.ndarray:
+        """Evaluate the unnormalized pedestal-plus-core density shape."""
         pedestal_shape = pedestal_tanh_shape(
             rho,
             pedestal_width=pedestal_width,

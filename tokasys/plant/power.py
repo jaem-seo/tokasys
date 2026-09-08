@@ -36,6 +36,12 @@ def evaluate_power_plant(
     tech: TechnologyParameters,
     config: ReactorConfig,
 ) -> PowerPlantState:
+    """Convert recoverable heat to gross and net electric power.
+
+    The balance includes pulsed duty factor, heating and current-drive wall-plug
+    demand, coolant pumping, cryogenics, vacuum and tritium systems, power
+    supplies, and fixed house loads.
+    """
     pulse_cycle_s = (
         tech.cs_startup_duration_s
         + tech.cs_pulse_flat_top_duration_s

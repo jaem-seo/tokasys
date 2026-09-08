@@ -19,26 +19,32 @@ from tokasys.core.types import (
 
 
 def _dv(*values: float) -> DesignVariables:
+    """Build JAX-backed design variables from scalar values in field order."""
     return DesignVariables(*[jnp.asarray(v, dtype=float) for v in values])
 
 
 def _cv(*values: float) -> ClosureVariables:
+    """Build JAX-backed closure variables from scalar values in field order."""
     return ClosureVariables(*[jnp.asarray(v, dtype=float) for v in values])
 
 
 def default_config() -> ReactorConfig:
+    """Return the baseline discrete reactor-model configuration."""
     return ReactorConfig(steady_state=True, objective_id=0, cost_model_id=0)
 
 
 def default_numerics() -> NumericalOptions:
+    """Return the baseline numerical discretization options."""
     return NumericalOptions(profile_num_points=96)
 
 
 def default_optimization() -> OptimizationConfig:
+    """Return the baseline objective and constraint-selection settings."""
     return OptimizationConfig()
 
 
 def default_technology() -> TechnologyParameters:
+    """Return the baseline physics, engineering, and economic assumptions."""
     return TechnologyParameters(
         effective_ion_mass_amu=2.5,
         ion_to_electron_temperature_ratio=1.0,
@@ -203,6 +209,7 @@ def default_technology() -> TechnologyParameters:
 
 
 def default_problem() -> ReactorProblem:
+    """Assemble the baseline design point, closure state, bounds, and settings."""
     initial = _dv(
         6.2,   # R [m]
         3.1,   # aspect ratio

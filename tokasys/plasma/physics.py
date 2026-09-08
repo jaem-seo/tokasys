@@ -138,6 +138,12 @@ def evaluate_plasma(
     config: ReactorConfig,
     closure: ClosureVariables | None = None,
 ) -> PlasmaState:
+    """Evaluate profiles, fusion, radiation, current, and energy closure.
+
+    Density is fixed from the Greenwald fraction, while temperature and stored
+    energy are reconciled using the configured full-space or self-consistent
+    closure. The returned state retains scalar totals and radial profiles.
+    """
     a = geom.minor_radius_m
     r0 = x.major_radius_m
     ip_ma = x.plasma_current_ma
@@ -251,6 +257,7 @@ def evaluate_plasma(
         )
 
     def evaluate_at_stored_energy(target_stored_energy_mj: jnp.ndarray) -> dict:
+        """Evaluate all coupled plasma quantities at a trial stored energy."""
         if profile_model == "tokasys":
             te_profile, _, core_temperature_scale = temperature_profile_keV(
                 rho=rho,

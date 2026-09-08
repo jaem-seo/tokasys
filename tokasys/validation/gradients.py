@@ -6,6 +6,7 @@ import numpy as np
 
 
 def central_difference_jacobian(fun, x: np.ndarray, step: float = 1.0e-5) -> np.ndarray:
+    """Approximate a scalar or vector-function Jacobian by central differences."""
     x = np.asarray(x, dtype=float)
     y0 = np.atleast_1d(np.asarray(fun(x), dtype=float))
     jac = np.empty((y0.size, x.size), dtype=float)

@@ -20,6 +20,7 @@ from tokasys.core.types import DesignVariables, GeometryState, NuclearState, Tec
 def tf_structural_fractions(
     tech: TechnologyParameters,
 ) -> tuple[jnp.ndarray, jnp.ndarray]:
+    """Split the TF coil cross-section into structure and winding-pack fractions."""
     structural_fraction = jnp.clip(tech.tf_structural_factor, 0.05, 0.90)
     return structural_fraction, 1.0 - structural_fraction
 
@@ -31,6 +32,7 @@ def tf_stress_pa(
     structural_fraction: jnp.ndarray,
     winding_pack_fraction: jnp.ndarray,
 ) -> jnp.ndarray:
+    """Estimate TF structural stress from magnetic pressure and radial leverage."""
     magnetic_pressure = peak_field_t**2 / (2.0 * MU0)
     lever_arm = x.major_radius_m - safe_tf_radius_m
     load_sharing = winding_pack_fraction / jnp.maximum(structural_fraction, 1.0e-6)
@@ -48,6 +50,7 @@ def tf_centering_force_per_coil_mn(
     geom: GeometryState,
     tech: TechnologyParameters,
 ) -> jnp.ndarray:
+    """Estimate inward TF centering force carried by one toroidal coil [MN]."""
     magnetic_pressure = peak_field_t**2 / (2.0 * MU0)
     return (
         magnetic_pressure
@@ -62,6 +65,7 @@ def plasma_neutron_leakage_proxy(
     nuclear: NuclearState,
     tech: TechnologyParameters,
 ) -> jnp.ndarray:
+    """Estimate nuclear heat reaching cold TF structures after attenuation."""
     # A small configurable fraction of unattenuated neutron power is assumed
     # geometrically incident on cold structures before blanket/shield attenuation.
     unattenuated_reference_mw = (

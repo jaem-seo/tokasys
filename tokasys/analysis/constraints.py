@@ -26,6 +26,7 @@ def _row_report(
     jacobian_row: np.ndarray,
     active_tolerance: float,
 ) -> dict[str, Any]:
+    """Summarize one constraint value and its strongest local sensitivity."""
     abs_jacobian = np.abs(jacobian_row)
     strongest_index = int(np.argmax(abs_jacobian)) if abs_jacobian.size else 0
     if kind == "equality":

@@ -59,6 +59,7 @@ def evaluate_exhaust(
     tech: TechnologyParameters,
     config: ReactorConfig,
 ) -> ExhaustState:
+    """Evaluate separatrix power deposition, divertor heat flux, and lifetime."""
     # The transport loss is the net power crossing the separatrix in this 0D closure.
     p_sep = plasma.transport_loss_mw
     radiated_power = tech.divertor_radiated_fraction * p_sep

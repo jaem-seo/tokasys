@@ -21,7 +21,7 @@ def spitzer_resistivity_ohm_m(
     zeff: float,
     coulomb_logarithm: float = 17.0,
 ) -> jnp.ndarray:
-    """Parallel Spitzer-Harm resistivity in ohm-m."""
+    """Evaluate parallel Spitzer-Harm resistivity from temperature and Zeff."""
     te_ev = jnp.maximum(temperature_keV, 1.0e-3) * 1.0e3
     z = zeff
     finite_z = (1.0 + 1.198 * z + 0.222 * z**2) / (
@@ -42,7 +42,7 @@ def bootstrap_current_model(
     x: DesignVariables,
     tech: TechnologyParameters,
 ) -> tuple[jnp.ndarray, jnp.ndarray, jnp.ndarray]:
-    """Sauter-inspired reduced bootstrap fraction."""
+    """Estimate bootstrap fraction, collisionality, and pressure-gradient drive."""
     pressure_average = jnp.maximum(profile_average(pressure_profile_pa, weights), 1.0)
     dp_drho = radial_derivative(pressure_profile_pa, rho)
     gradient_drive = profile_average(jnp.maximum(-rho * dp_drho, 0.0), weights)
@@ -95,7 +95,7 @@ def current_drive_model(
     electron_temperature_keV: jnp.ndarray,
     pressure_profile_pa: jnp.ndarray,
 ) -> tuple[jnp.ndarray, jnp.ndarray]:
-    """Generic normalized-efficiency current-drive closure."""
+    """Estimate driven current and effective normalized current-drive efficiency."""
     pressure_weight = pressure_profile_pa * weights / jnp.maximum(
         profile_average(pressure_profile_pa, weights),
         1.0e-30,
@@ -136,6 +136,7 @@ def _current_density_from_shape(
     geom: GeometryState,
     weights: jnp.ndarray,
 ) -> jnp.ndarray:
+    """Normalize a radial shape to carry the specified total plasma current."""
     normalized_shape = shape / jnp.maximum(profile_average(shape, weights), 1.0e-30)
     average_current_density = current_ma * 1.0e6 / jnp.maximum(
         geom.plasma_cross_section_m2,

@@ -29,6 +29,7 @@ class DesignSolution:
 
 
 def _to_numpy(x):
+    """Transfer a JAX value to a floating-point NumPy array for SciPy."""
     return np.asarray(jax.device_get(x), dtype=float)
 
 
@@ -52,6 +53,7 @@ def solve_slsqp(
     )
 
     def fun(u):
+        """Return the scalar objective and exact gradient expected by SciPy."""
         value, grad = funcs["objective_value_and_grad"](u)
         return float(value), _to_numpy(grad)
 

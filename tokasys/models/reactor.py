@@ -37,6 +37,13 @@ def evaluate_reactor(
     config: ReactorConfig,
     numerics: NumericalOptions | None = None,
 ) -> ReactorResult:
+    """Evaluate the coupled reactor and construct optimizer residuals and margins.
+
+    The function accepts either design variables alone for a forward evaluation
+    or design plus closure variables for a full-space optimization evaluation.
+    It returns all geometry, plasma, magnet, nuclear, exhaust, power, economics,
+    equality-residual, and inequality-margin states in one immutable result.
+    """
     if numerics is None:
         numerics = NumericalOptions()
 

@@ -23,6 +23,7 @@ _MARGIN_COUNT = len(MarginState._fields)
 
 
 def _named_indices(names: tuple[str, ...], selected: tuple[str, ...]) -> tuple[int, ...]:
+    """Resolve selected constraint names to canonical tuple indices."""
     unknown = tuple(name for name in selected if name not in names)
     if unknown:
         raise ValueError(f"Unknown constraint name(s): {unknown}")
@@ -35,6 +36,7 @@ def _apply_selection(
     enabled: tuple[str, ...],
     disabled: tuple[str, ...],
 ) -> tuple[int, ...]:
+    """Apply explicit enabled and disabled names to candidate indices."""
     candidates = set(candidate_indices)
     selected = (
         tuple(i for i in _named_indices(names, enabled) if i in candidates)
@@ -49,6 +51,7 @@ def active_equality_indices(
     config: ReactorConfig | None,
     optimization: OptimizationConfig | None = None,
 ) -> tuple[int, ...]:
+    """Return equality indices active for the closure mode and user selection."""
     if config is None:
         candidates = tuple(range(_RESIDUAL_COUNT))
         if optimization is None:
@@ -85,6 +88,7 @@ def active_equality_indices(
 def active_inequality_indices(
     optimization: OptimizationConfig | None = None,
 ) -> tuple[int, ...]:
+    """Return inequality indices retained by the optimization configuration."""
     candidates = tuple(range(_MARGIN_COUNT))
     if optimization is None:
         return candidates
@@ -101,6 +105,7 @@ def equality_vector(
     config: ReactorConfig | None = None,
     optimization: OptimizationConfig | None = None,
 ) -> jnp.ndarray:
+    """Stack and select normalized equality residuals for the optimizer."""
     residuals = jnp.stack(list(result.residuals))
     if config is None and optimization is None:
         return residuals
@@ -111,7 +116,7 @@ def inequality_vector(
     result: ReactorResult,
     optimization: OptimizationConfig | None = None,
 ) -> jnp.ndarray:
-    """Return positive-is-feasible normalized engineering margins."""
+    """Stack and select positive-is-feasible normalized engineering margins."""
     margins = jnp.stack(list(result.margins))
     if optimization is None:
         return margins

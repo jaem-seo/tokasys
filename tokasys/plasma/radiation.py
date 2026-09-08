@@ -21,7 +21,7 @@ def electron_ion_bremsstrahlung_mw(
     zeff: float,
     volume_m3: jnp.ndarray,
 ) -> jnp.ndarray:
-    """Nonrelativistic electron-ion bremsstrahlung power."""
+    """Integrate nonrelativistic electron-ion bremsstrahlung over the plasma."""
     ne20 = electron_density_m3 / 1.0e20
     te_kev = jnp.maximum(temperature_keV, 1.0e-6)
     power_density_mw_m3 = 5.35e-3 * zeff * ne20**2 * jnp.sqrt(te_kev)
@@ -63,7 +63,7 @@ def albajar_fidone_synchrotron_radiation_mw(
     weights: jnp.ndarray,
     config: ReactorConfig,
 ) -> tuple[jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray]:
-    """Albajar/Fidone global synchrotron radiation fit."""
+    """Evaluate the Albajar/Fidone synchrotron radiation fit and diagnostics."""
     ne0_20 = jnp.maximum(electron_density_m3[0] / 1.0e20, 1.0e-12)
     te0 = jnp.maximum(temperature_keV[0], 1.0e-6)
     ne_avg = profile_average(electron_density_m3, weights)

@@ -25,10 +25,12 @@ from tokasys.plasma.radiation import electron_ion_bremsstrahlung_mw
 
 
 def _as_float(value: Any) -> float:
+    """Convert a scalar array-like diagnostic value to a Python float."""
     return float(np.asarray(value))
 
 
 def _cumulative_trapezoid(y: np.ndarray, x: np.ndarray) -> np.ndarray:
+    """Integrate sampled data cumulatively with the trapezoidal rule."""
     increments = 0.5 * (y[1:] + y[:-1]) * np.diff(x)
     return np.concatenate([np.asarray([0.0]), np.cumsum(increments)])
 
@@ -40,6 +42,7 @@ def _miller_boundary(
     triangularity: float,
     num_points: int = 256,
 ) -> tuple[np.ndarray, np.ndarray]:
+    """Generate an R-Z Miller boundary for a shaped plasma surface."""
     theta = np.linspace(0.0, 2.0 * np.pi, num_points, endpoint=False)
     r = major_radius_m + minor_radius_m * np.cos(
         theta + triangularity * np.sin(theta)
@@ -52,6 +55,7 @@ def _closed_polygon(
     r: np.ndarray,
     z: np.ndarray,
 ) -> tuple[np.ndarray, np.ndarray]:
+    """Append the first R-Z vertex when needed to close a polygon."""
     if r.size == 0:
         return r, z
     if np.isclose(r[0], r[-1]) and np.isclose(z[0], z[-1]):
@@ -60,6 +64,7 @@ def _closed_polygon(
 
 
 def _polygon_signed_area(r: np.ndarray, z: np.ndarray) -> float:
+    """Return signed R-Z polygon area for orientation checks."""
     r = np.asarray(r, dtype=float)
     z = np.asarray(z, dtype=float)
     if r.size > 1 and np.isclose(r[0], r[-1]) and np.isclose(z[0], z[-1]):
@@ -74,6 +79,7 @@ def _oriented_polygon(
     *,
     clockwise: bool,
 ) -> tuple[np.ndarray, np.ndarray]:
+    """Reverse polygon vertices when needed to obtain the requested orientation."""
     r = np.asarray(r, dtype=float)
     z = np.asarray(z, dtype=float)
     area = _polygon_signed_area(r, z)
@@ -87,6 +93,7 @@ def _path_vertices_and_codes(
     r: np.ndarray,
     z: np.ndarray,
 ) -> tuple[np.ndarray, np.ndarray]:
+    """Convert closed R-Z vertices to Matplotlib path vertices and codes."""
     r, z = _closed_polygon(np.asarray(r, dtype=float), np.asarray(z, dtype=float))
     vertices = np.column_stack([r, z])
     codes = np.full(r.size, MplPath.LINETO, dtype=np.uint8)
@@ -105,6 +112,7 @@ def _closed_path_patch(
     alpha: float = 0.90,
     zorder: int = 1,
 ) -> PathPatch:
+    """Create a filled Matplotlib patch from one closed R-Z boundary."""
     vertices, codes = _path_vertices_and_codes(r, z)
     return PathPatch(
         MplPath(vertices, codes),
@@ -129,6 +137,7 @@ def _closed_shell_patch(
     alpha: float = 0.90,
     zorder: int = 1,
 ) -> PathPatch:
+    """Create a filled shell patch with an outer boundary and inner hole."""
     outer_r, outer_z = _oriented_polygon(outer_r, outer_z, clockwise=False)
     inner_r, inner_z = _oriented_polygon(inner_r, inner_z, clockwise=True)
     outer_vertices, outer_codes = _path_vertices_and_codes(outer_r, outer_z)
@@ -154,6 +163,7 @@ def _asymmetric_miller_boundary(
     triangularity: float,
     num_points: int = 240,
 ) -> tuple[np.ndarray, np.ndarray]:
+    """Generate a Miller-like boundary with different inboard/outboard radii."""
     theta = np.linspace(0.0, 2.0 * np.pi, num_points, endpoint=False)
     shaped_cos = np.cos(theta + triangularity * np.sin(theta))
     radial_extent = np.where(
@@ -182,6 +192,7 @@ def _fill_asymmetric_miller_shell(
     alpha: float = 0.90,
     zorder: int = 1,
 ) -> None:
+    """Add an asymmetric Miller shell to the supplied plotting axes."""
     outer_r, outer_z = _asymmetric_miller_boundary(
         major_radius_m,
         outer_inboard_minor_radius_m,
@@ -222,6 +233,7 @@ def _fill_closed_polygon(
     alpha: float = 0.90,
     zorder: int = 1,
 ) -> None:
+    """Add a filled closed R-Z polygon to the supplied plotting axes."""
     ax.add_patch(
         _closed_path_patch(
             r,
@@ -248,6 +260,7 @@ def _fill_closed_shell(
     alpha: float = 0.90,
     zorder: int = 1,
 ) -> None:
+    """Add a filled shell between arbitrary outer and inner R-Z boundaries."""
     ax.add_patch(
         _closed_shell_patch(
             outer_r,
@@ -278,6 +291,7 @@ def _fill_miller_shell(
     alpha: float = 0.90,
     zorder: int = 1,
 ) -> None:
+    """Add a self-similar Miller shell with optional inner/outer elongations."""
     inner_kappa = elongation if inner_elongation is None else inner_elongation
     outer_kappa = elongation if outer_elongation is None else outer_elongation
     outer_r, outer_z = _miller_boundary(
@@ -486,6 +500,7 @@ def _density_from_weighted_shape(
     weights: np.ndarray,
     volume_m3: float,
 ) -> np.ndarray:
+    """Convert a weighted radial shape and total power to power density [MW/m3]."""
     normalized = shape / np.maximum(np.sum(shape * weights), 1.0e-30)
     return total_mw * normalized / np.maximum(volume_m3, 1.0e-30)
 
@@ -549,6 +564,7 @@ def diagnostic_heating_profiles(
 
 
 def plot_radial_build(ax: Any, design: Any, technology: Any, result: Any) -> None:
+    """Draw plasma, plant layers, TF/PF coils, and CS in an R-Z cross-section."""
     geom = result.geometry
     major_radius = _as_float(design.major_radius_m)
     minor_radius = _as_float(geom.minor_radius_m)

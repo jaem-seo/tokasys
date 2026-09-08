@@ -687,6 +687,7 @@ def evaluate_economics(
         capacity_value: jnp.ndarray,
         jo_value: jnp.ndarray,
     ) -> jnp.ndarray:
+        """Select one component result from the three evaluated cost models."""
         return _select_cost_model(
             model_id,
             legacy_value,

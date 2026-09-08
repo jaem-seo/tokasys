@@ -21,6 +21,7 @@ from tokasys.models.reactor import evaluate_reactor
 
 
 def _open_json_resource(path: Any) -> dict[str, Any]:
+    """Read a JSON mapping from a filesystem or package-resource path."""
     with path.open("r", encoding="utf-8") as handle:
         return json.load(handle)
 
@@ -66,6 +67,7 @@ def load_reference_cases_from_directory(path: str | Path) -> list[dict[str, Any]
 
 
 def _expand_legacy_build_fields(values: dict[str, Any]) -> dict[str, Any]:
+    """Expand symmetric legacy build inputs into inboard/outboard values."""
     expanded = dict(values)
     legacy_pairs = {
         "first_wall_thickness_m": (
@@ -91,6 +93,7 @@ def _expand_legacy_build_fields(values: dict[str, Any]) -> dict[str, Any]:
 
 
 def _replace_array_fields(obj: Any, values: dict[str, Any]) -> Any:
+    """Replace selected NamedTuple fields with floating-point JAX arrays."""
     values = _expand_legacy_build_fields(values)
     return obj._replace(
         **{name: jnp.asarray(value, dtype=float) for name, value in values.items()}
@@ -155,6 +158,7 @@ def _resolve_path(
     design: DesignVariables,
     result: ReactorResult,
 ) -> float:
+    """Resolve a dotted design or reactor-result path to a scalar value."""
     root_name, *parts = path.split(".")
     if root_name == "design":
         obj: Any = design
@@ -313,8 +317,10 @@ def format_reference_suite(report: dict[str, Any]) -> str:
 
 
 def failed_metrics(report: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return only metric rows that exceed their reference tolerance."""
     return [row for row in report["metrics"] if not row["passed"]]
 
 
 def max_relative_error(report: dict[str, Any]) -> float:
+    """Return the largest absolute relative error in a comparison report."""
     return float(max(abs(row["relative_error"]) for row in report["metrics"]))
