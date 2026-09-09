@@ -275,7 +275,7 @@ class OptimizationGUI:
         self.root = root
         self.root.title("TokaSys Optimization")
         self.root.geometry("1180x900")
-        self.root.minsize(1400, 1000)
+        self.root.minsize(1400, 950)
 
         self.objective_vars: dict[str, tuple[tk.BooleanVar, tk.StringVar]] = {}
         self.design_vars: dict[str, tuple[tk.StringVar, tk.StringVar, tk.StringVar]] = {}
