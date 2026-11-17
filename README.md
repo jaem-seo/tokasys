@@ -213,3 +213,17 @@ feasible, which matches the convention expected by SciPy SLSQP.
 The reporting helpers translate normalized residuals and margins back into
 physical values, units, limits, and satisfaction flags. This makes it possible
 to distinguish solver convergence from actual engineering feasibility.
+
+## Citing
+```
+@article{SEO2027tokasys,
+      title = {JAX-enabled differentiable systems code for tokamak reactor designs},
+      journal = {Computer Physics Communications},
+      volume = {331},
+      pages = {110508},
+      year = {2027},
+      issn = {0010-4655},
+      doi = {https://doi.org/10.1016/j.cpc.2026.110508},
+      author = {Jaemin Seo},
+}
+```
