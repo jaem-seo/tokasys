@@ -98,6 +98,7 @@ Run it from the repository root:
 ```bash
 PYTHONPATH=. python GUI.py
 ```
+<img width="1003" height="700" alt="image" src="https://github.com/user-attachments/assets/f68efe32-1ea2-4245-8900-23ee70a66724" />
 
 The window is organized into three columns:
 
