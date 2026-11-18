@@ -109,7 +109,7 @@ The window is organized into three columns:
 - Column 3 contains reactor configuration, technology assumptions, tolerances,
   solver controls, and closure-variable bounds and initial values.
 
-Hover over a section or variable name to display an English description. The
+Hover over a section or variable name to display a description. The
 three buttons at the bottom implement the complete interactive workflow:
 
 - **Default** reloads `examples/optimization_reactor_config.json` and fills any
